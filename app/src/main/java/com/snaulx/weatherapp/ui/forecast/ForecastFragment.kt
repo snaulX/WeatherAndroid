@@ -1,4 +1,4 @@
-package com.snaulx.weatherapp.ui.home
+package com.snaulx.weatherapp.ui.forecast
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.snaulx.weatherapp.databinding.FragmentHomeBinding
+import com.snaulx.weatherapp.api.OpenWeather
+import com.snaulx.weatherapp.databinding.FragmentForecastBinding
+import retrofit2.Retrofit
 
-class HomeFragment : Fragment() {
+class ForecastFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentForecastBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,10 +24,15 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .build()
+        val weatherService = retrofit.create(OpenWeather::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val homeViewModel =
+            ViewModelProvider(this).get(ForecastViewModel::class.java)
+
+        _binding = FragmentForecastBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
